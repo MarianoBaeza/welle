@@ -32,27 +32,27 @@ export function BundleCard({ bundle }: Props) {
         <div className="flex items-end justify-between gap-6">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2 transition-transform duration-500 ease-out group-hover:-translate-y-4">
-              <span className="text-xs uppercase tracking-widest text-zinc-400 font-semibold">
-                Best Value
-              </span>
               <h2 className="text-5xl font-black text-white leading-none tracking-tight">
                 {bundle.name}
               </h2>
               <p className="text-zinc-300 text-base mt-1">
-                All 3 libraries. Every sound you need, in one bundle.
+                All 3 libraries. 475 sounds. One download.
               </p>
             </div>
             <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out">
               <p className="max-w-md text-sm text-zinc-400 leading-relaxed overflow-hidden opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
-                475 sounds spanning every mood and energy. ASMR stillness, cinematic gravity, content-ready chaos — all in a single download. Stop hunting for the right sound. Start creating.
+                ASMR stillness, cinematic gravity, content-ready energy — 475 sounds across every mood. One purchase. No subscriptions. Stop hunting for the right sound and start making the thing.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-end gap-2 shrink-0">
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="text-zinc-500 text-xs uppercase tracking-widest">Total price</span>
-              <span className="text-zinc-400 text-sm line-through">$57</span>
+          <div className="flex flex-col items-end gap-3 shrink-0">
+            <span className="bg-white text-black text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full">
+              Save $18
+            </span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-zinc-500 text-xl line-through">${bundle.price + 18}</span>
+              <span className="text-white text-6xl font-black leading-none">${bundle.price}</span>
             </div>
             <WelleButton accentColor="white" onClick={(e) => { e.stopPropagation(); handleBuy(); }}>
               Get Bundle — ${bundle.price}

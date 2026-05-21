@@ -31,20 +31,16 @@ export function LibraryCard({ library, onHoverEnter, onHoverLeave }: Props) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
-      <div className="absolute inset-0 flex flex-col justify-end gap-4 p-5">
+      <div className="absolute inset-0 flex flex-col justify-end gap-3 p-5">
         <h2 className="text-4xl font-black text-white leading-none tracking-tight">
           {library.name}
         </h2>
-
-        <div className="flex gap-2 flex-wrap">
-          {library.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-xs uppercase tracking-widest text-zinc-300 border border-zinc-600 px-2.5 py-1 rounded"
-            >
-              {tag}
-            </span>
-          ))}
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-zinc-300 leading-snug">{library.tagline}</p>
+          <p className="text-xs uppercase tracking-widest text-zinc-400">-</p>
+          <span className="text-xs uppercase tracking-widest text-zinc-400">
+            {library.soundCount} sounds
+          </span>
         </div>
 
         <div className="flex items-center gap-3">
