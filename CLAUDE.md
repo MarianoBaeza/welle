@@ -91,12 +91,30 @@ Grupos: Stripe, Stripe Price IDs, Cloudflare R2, Resend, App URL.
 - [x] framer-motion, stripe, @stripe/stripe-js, resend instalados
 - [x] `products.ts` con las 3 librerías y bundle
 - [x] `.env.example` y `.env.local` creados
-- [ ] Homepage (`/`)
-- [ ] Library page (`/library/[slug]`)
-- [ ] Stripe Checkout API route
+- [x] Homepage (`/`)
+- [x] Library page (`/library/[slug]`)
+- [x] Stripe Checkout API route (`/api/checkout`)
+- [x] Audio previews MP3 en `public/previews/{slug}/` (22 archivos, 30s trim)
 - [ ] Webhook handler + R2 signed URLs
 - [ ] Email de confirmación con Resend
 - [ ] Success page (`/success`)
+
+## Componentes UI
+
+### Regla de estandarización
+- Antes de crear cualquier botón, input, badge u otro elemento de UI, verificar si ya existe un componente en `components/ui/` que lo cubra
+- Si existe: usarlo siempre. Si necesita una nueva variante, agregarla al componente existente
+- Si no existe: crear el componente en `components/ui/` con variantes desde el principio, pensando en todos los usos conocidos
+- Nunca instanciar `<button>` o `<input>` raw en componentes de feature — siempre usar el componente de `components/ui/`
+
+### Componentes disponibles
+| Componente | Archivo | Variantes / Notas |
+|---|---|---|
+| `WelleButton` | `components/ui/welle-button.tsx` | `solid` (accentColor bg, text-black), `white` (bg-white, text-black), `outline-accent` (borde dinámico con `accentColor`). Para `outline-accent` fuera de un flex container, pasar `className="flex-none"` para evitar que `flex-1` lo expanda. |
+| `BackgroundGradient` | `components/ui/background-gradient.tsx` | Gradiente radial con Framer Motion que sigue el cursor. Props: `hoveredId` (string \| null), `accents` (array `{id, color}`). Posición `fixed -z-10`. |
+| `NavHeader` | `components/NavHeader.tsx` | Prop opcional `cta: { label, onAction, loading?, accentColor? }`. Si se pasa, reemplaza el tagline con un botón `outline-accent`. Backdrop blur al hacer scroll. Logo linkea a `/`. |
+| `LibraryPlayer` | `components/LibraryPlayer.tsx` | Player de audio con tracks agrupados por categoría (2 columnas), barra de progreso clickeable, y `SpectrumVisualizer`. Props: `tracks`, `accentColor`, `soundCount`. |
+| `SpectrumVisualizer` | `components/SpectrumVisualizer.tsx` | Canvas con Web Audio API. Recibe `analyserRef`, `isPlaying`, `accentColor`. Estado idle: barras finas al 15% de opacidad. |
 
 ## Sistema de diseño
 
@@ -142,3 +160,27 @@ Cada producto tiene imagen propia (generada con IA) y un color de acento que def
 - Múltiples preview tracks por producto (ya en `products.ts`)
 - La card muestra nombre del track activo + barra de progreso
 - Solo una card puede estar en play a la vez
+
+### Layout de la library page (`/library/[slug]`)
+Banner 3 columnas (`grid-cols-[2fr_3fr_2fr]`):
+- **Izquierda**: imagen `aspect-square` + tags + description
+- **Centro**: `LibraryPlayer` — tracks por categoría, progress bar, `SpectrumVisualizer`
+- **Derecha**: precio en `accentColor` (6xl/black) + sound count + `WelleButton variant="white"`
+
+Debajo del banner:
+1. **Upsell al bundle** — "Get all 3 libraries · $39 · Save $18"
+2. **CTA banner full-width** — tagline a la izquierda, `Buy Now — $19` a la derecha
+3. **Footer**
+
+El `NavHeader` en library pages reemplaza el tagline con un botón `outline-accent` sticky.
+
+### Audio previews
+- Archivos en `public/previews/{slug}/*.mp3` (30s trim, 128kbps)
+- `PreviewTrack` tiene `name`, `file`, `category` — los tracks se agrupan por categoría en el player
+- El `AudioContext` se inicializa lazy en el primer click (compatibilidad Safari/autoplay policy)
+- `MediaElementSourceNode` se crea una sola vez por instancia del player — no recrear
+
+### API de checkout
+- `POST /api/checkout` — body: `{ priceId: string }` — responde: `{ url: string }`
+- Redirige a Stripe Checkout. `success_url` → `/success?session_id=...`, `cancel_url` → `/`
+- Requiere `STRIPE_SECRET_KEY` y `NEXT_PUBLIC_APP_URL` en env

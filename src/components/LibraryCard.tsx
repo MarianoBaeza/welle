@@ -1,19 +1,30 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Library } from '@/types';
+import { WelleButton } from '@/components/ui/welle-button';
 
 interface Props {
   library: Library;
+  onHoverEnter?: () => void;
+  onHoverLeave?: () => void;
 }
 
-export function LibraryCard({ library }: Props) {
+export function LibraryCard({ library, onHoverEnter, onHoverLeave }: Props) {
+  const router = useRouter();
+
   return (
-    <div className="group relative aspect-square overflow-hidden bg-zinc-900 transition-shadow duration-300 hover:shadow-lg">
+    <div
+      className="group relative aspect-square overflow-hidden bg-zinc-900 transition-shadow duration-300 hover:shadow-lg cursor-pointer"
+      onMouseEnter={onHoverEnter}
+      onMouseLeave={onHoverLeave}
+      onClick={() => router.push(`/library/${library.slug}`)}
+    >
       <Image
         src={library.image}
         alt={library.name}
+        loading='eager'
         fill
         className="object-cover transition-transform duration-700 group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, 33vw"
@@ -37,28 +48,13 @@ export function LibraryCard({ library }: Props) {
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            disabled
-            title="Preview coming soon"
-            className="w-10 h-10 shrink-0 rounded-full flex items-center justify-center border border-zinc-600 text-zinc-400 cursor-not-allowed"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 ml-0.5">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          </button>
-
-          <Link
-            href={`/library/${library.slug}`}
-            style={
-              {
-                '--accent': library.accentColor,
-                borderColor: library.accentColor,
-              } as React.CSSProperties
-            }
-            className="flex-1 text-center py-2.5 rounded-lg text-sm font-bold uppercase tracking-widest border text-white hover:bg-[var(--accent)] hover:text-black transition-colors duration-200"
+          <WelleButton
+            variant="outline-accent"
+            accentColor={library.accentColor}
+            onClick={(e) => e.stopPropagation()}
           >
             Buy Now — ${library.price}
-          </Link>
+          </WelleButton>
         </div>
       </div>
     </div>

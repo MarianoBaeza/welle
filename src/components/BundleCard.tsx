@@ -2,33 +2,22 @@
 
 import Image from 'next/image';
 import { Bundle } from '@/types';
+import { WelleButton } from '@/components/ui/welle-button';
 
 interface Props {
   bundle: Bundle;
 }
 
-function Waveform() {
-  const bars = [4, 9, 6, 14, 8, 16, 10, 7, 13, 5, 11, 9, 15, 6, 12, 8, 14, 5, 10, 7];
-  return (
-    <svg viewBox="0 0 104 20" className="w-28 h-5" aria-hidden>
-      {bars.map((h, i) => (
-        <rect
-          key={i}
-          x={i * 5 + 1}
-          y={(20 - h) / 2}
-          width={3}
-          height={h}
-          rx={1}
-          className="fill-zinc-600"
-        />
-      ))}
-    </svg>
-  );
-}
-
 export function BundleCard({ bundle }: Props) {
+  function handleBuy() {
+    // TODO: trigger Stripe checkout
+  }
+
   return (
-    <div className="group relative aspect-video overflow-hidden bg-zinc-900 ">
+    <div
+      className="group relative aspect-video max-h-[calc(100vh-5rem)] overflow-hidden bg-zinc-900 cursor-pointer"
+      onClick={handleBuy}
+    >
       <Image
         src={bundle.image}
         alt={bundle.name}
@@ -39,42 +28,36 @@ export function BundleCard({ bundle }: Props) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-      <div className="absolute inset-0 flex flex-col justify-end gap-5 p-8 md:p-10">
-        <div className="flex flex-col gap-2">
-          <span className="text-xs uppercase tracking-widest text-zinc-400 font-semibold">
-            Best Value
-          </span>
-          <h2 className="text-5xl font-black text-white leading-none tracking-tight">
-            {bundle.name}
-          </h2>
-          <p className="text-zinc-300 text-base mt-1">
-            All 3 libraries. Every sound you need, in one bundle.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            <button
-              disabled
-              title="Preview coming soon"
-              className="w-11 h-11 shrink-0 rounded-full flex items-center justify-center border border-zinc-600 text-zinc-500 cursor-not-allowed"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 ml-0.5">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </button>
-            <Waveform />
+      <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
+        <div className="flex items-end justify-between gap-6">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2 transition-transform duration-500 ease-out group-hover:-translate-y-4">
+              <span className="text-xs uppercase tracking-widest text-zinc-400 font-semibold">
+                Best Value
+              </span>
+              <h2 className="text-5xl font-black text-white leading-none tracking-tight">
+                {bundle.name}
+              </h2>
+              <p className="text-zinc-300 text-base mt-1">
+                All 3 libraries. Every sound you need, in one bundle.
+              </p>
+            </div>
+            <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-500 ease-out">
+              <p className="max-w-md text-sm text-zinc-400 leading-relaxed overflow-hidden opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 ease-out">
+                475 sounds spanning every mood and energy. ASMR stillness, cinematic gravity, content-ready chaos — all in a single download. Stop hunting for the right sound. Start creating.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="flex items-center gap-4">
-          <button
-            disabled
-            className="flex-1 md:flex-none md:px-10 py-3.5 rounded-xl text-sm font-black uppercase tracking-widest bg-white text-black cursor-not-allowed opacity-90 hover:opacity-100 transition-opacity"
-          >
-            Get Bundle — ${bundle.price}
-          </button>
-          <span className="text-zinc-400 text-sm line-through">$57</span>
+          <div className="flex flex-col items-end gap-2 shrink-0">
+            <div className="flex flex-col items-end gap-0.5">
+              <span className="text-zinc-500 text-xs uppercase tracking-widest">Total price</span>
+              <span className="text-zinc-400 text-sm line-through">$57</span>
+            </div>
+            <WelleButton accentColor="white" onClick={(e) => { e.stopPropagation(); handleBuy(); }}>
+              Get Bundle — ${bundle.price}
+            </WelleButton>
+          </div>
         </div>
       </div>
     </div>

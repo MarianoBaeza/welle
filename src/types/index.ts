@@ -16,6 +16,7 @@ export interface Library {
 export interface PreviewTrack {
   name: string;
   file: string;
+  category: string;
 }
 
 export interface Bundle {
