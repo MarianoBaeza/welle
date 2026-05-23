@@ -9,6 +9,7 @@ interface Props {
   tracks: PreviewTrack[];
   accentColor: string;
   soundCount: number;
+  onAccentChange?: (color: string) => void;
 }
 
 function formatTime(s: number): string {
@@ -55,7 +56,7 @@ function TrackButton({
   );
 }
 
-export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
+export function LibraryPlayer({ tracks, accentColor, soundCount, onAccentChange }: Props) {
   const [currentTrack, setCurrentTrack] = useState<PreviewTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -107,6 +108,7 @@ export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
       setCurrentTrack(track);
       setCurrentTime(0);
       setProgress(0);
+      onAccentChange?.(track.accentColor ?? accentColor);
     }
   };
 
@@ -153,6 +155,8 @@ export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
     audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
   };
 
+  const currentAccent = currentTrack?.accentColor ?? accentColor;
+
   return (
     <div className="flex flex-col h-full justify-between gap-4">
       {/* Count + demo notice */}
@@ -186,7 +190,7 @@ export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
                           track={track}
                           isActive={currentTrack?.file === track.file}
                           isPlaying={isPlaying}
-                          accentColor={accentColor}
+                          accentColor={track.accentColor ?? accentColor}
                           onSelect={() => selectTrack(track)}
                         />
                       ))}
@@ -208,7 +212,7 @@ export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
         >
           <div
             className="h-full rounded-full"
-            style={{ width: `${progress * 100}%`, backgroundColor: accentColor }}
+            style={{ width: `${progress * 100}%`, backgroundColor: currentAccent }}
           />
         </div>
         <div className="flex justify-between text-[11px] text-zinc-500 px-0.5">
@@ -219,7 +223,7 @@ export function LibraryPlayer({ tracks, accentColor, soundCount }: Props) {
       </div>
 
       {/* Spectrum visualizer */}
-      <SpectrumVisualizer analyserRef={analyserRef} isPlaying={isPlaying} accentColor={accentColor} />
+      <SpectrumVisualizer analyserRef={analyserRef} isPlaying={isPlaying} accentColor={currentAccent} />
 
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
       <audio ref={audioRef} preload="none" />

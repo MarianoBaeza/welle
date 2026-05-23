@@ -9,7 +9,6 @@ export const libraries: Library[] = [
     description:
       'Tapping, textures, foley, rain, kalimba, ethereal tones — 162 sounds curated for creators who want their content to breathe. Perfect for ASMR channels, aesthetic edits, and relaxing streams.',
     price: 19,
-    stripePriceId: process.env.STRIPE_PRICE_ASMR ?? '',
     soundCount: 162,
     previewTracks: [
       { name: 'Forest Ambience', file: '/previews/asmr/forest-ambience.mp3', category: 'Nature' },
@@ -32,7 +31,6 @@ export const libraries: Library[] = [
     description:
       'Impacts, risers, whooshes, glitches, and UI sounds built for the speed of the feed. 123 sounds that make your TikToks, Reels, and Shorts hit the way they should.',
     price: 19,
-    stripePriceId: process.env.STRIPE_PRICE_CONTENT_CREATOR ?? '',
     soundCount: 123,
     previewTracks: [
       { name: 'Movie Trailer Impact', file: '/previews/content-creator/movie-trailer-impact.mp3', category: 'Impacts' },
@@ -56,7 +54,6 @@ export const libraries: Library[] = [
     description:
       'Deep atmospheres, tension builders, cinematic impacts, and emotional transitions. 190 sounds to make your vlogs, short films, and long-form content feel like they mean something.',
     price: 19,
-    stripePriceId: process.env.STRIPE_PRICE_CINEMATIC ?? '',
     soundCount: 190,
     previewTracks: [
       { name: 'Horror Ambience', file: '/previews/cinematic/horror-ambience.mp3', category: 'Ambience' },
@@ -75,8 +72,12 @@ export const libraries: Library[] = [
 
 export const bundle: Bundle = {
   name: 'Complete Bundle',
+  tagline: 'Every sound you need.',
+  description:
+    'ASMR stillness, cinematic gravity, content-ready energy. 475 sounds across every mood, style, and platform. One purchase, no subscriptions — everything you need to make your creativity heard.',
   price: 39,
-  stripePriceId: process.env.STRIPE_PRICE_BUNDLE ?? '',
+  soundCount: 475,
+  tags: ['ASMR', 'Cinematic', 'TikTok', 'Reels', 'Vlogs'],
   libraryIds: ['asmr', 'content-creator', 'cinematic'],
   image: '/bundle.jpg',
 };

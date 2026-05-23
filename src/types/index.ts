@@ -5,7 +5,6 @@ export interface Library {
   tagline: string;
   description: string;
   price: number;
-  stripePriceId: string;
   soundCount: number;
   previewTracks: PreviewTrack[];
   tags: string[];
@@ -17,12 +16,16 @@ export interface PreviewTrack {
   name: string;
   file: string;
   category: string;
+  accentColor?: string;
 }
 
 export interface Bundle {
   name: string;
+  tagline: string;
+  description: string;
   price: number;
-  stripePriceId: string;
+  soundCount: number;
+  tags: string[];
   libraryIds: string[];
   image: string;
 }

@@ -81,23 +81,45 @@ src/
 
 ## Variables de entorno
 
-Ver `.env.example`. Copiar a `.env.local` y completar.
-Grupos: Stripe, Stripe Price IDs, Cloudflare R2, Resend, App URL.
+Grupos: PayPal (sandbox), Cloudflare R2, Resend, App URL. Ver `.env.local`.
+
+```
+PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET   ← server-only
+NEXT_PUBLIC_PAYPAL_CLIENT_ID             ← frontend (PayPalScriptProvider)
+PAYPAL_API_URL=https://api-m.sandbox.paypal.com
+```
+
+## Pasarela de pagos — PayPal Orders API v2
+
+**Stripe fue eliminado.** No hay `stripePriceId` en types ni products.ts.
+
+Flujo:
+1. BUY NOW abre `PayPalModal`
+2. `PayPalButtons.createOrder` → `POST /api/checkout { productSlug, type }` → `{ orderID }`
+3. Usuario aprueba en popup de PayPal
+4. `PayPalButtons.onApprove` → `POST /api/capture { orderID }` → verifica `status === COMPLETED`
+5. Redirect a `/success?product={slug}&type={type}`
+
+Componentes clave:
+- `PayPalProvider` — wrapper client (`'use client'`) con `PayPalScriptProvider`, montado en `layout.tsx`
+- `PayPalModal` — modal con `PayPalButtons`, acepta `{ isOpen, onClose, productName, productSlug, price, type }`
+- Modal se gestiona con estado local en `HomeClient` y `LibraryPageClient`
 
 ## Estado del proyecto
 
 - [x] Next.js 16 + TypeScript + Tailwind + App Router inicializado
 - [x] shadcn/ui configurado
-- [x] framer-motion, stripe, @stripe/stripe-js, resend instalados
-- [x] `products.ts` con las 3 librerías y bundle
-- [x] `.env.example` y `.env.local` creados
+- [x] `@paypal/react-paypal-js`, `framer-motion`, `resend` instalados
+- [x] `products.ts` con las 3 librerías y bundle (sin Stripe IDs)
+- [x] `.env.local` con credenciales PayPal sandbox
 - [x] Homepage (`/`)
 - [x] Library page (`/library/[slug]`)
-- [x] Stripe Checkout API route (`/api/checkout`)
+- [x] PayPal checkout (`/api/checkout`) + capture (`/api/capture`)
+- [x] `PayPalModal` + `PayPalProvider`
 - [x] Audio previews MP3 en `public/previews/{slug}/` (22 archivos, 30s trim)
-- [ ] Webhook handler + R2 signed URLs
-- [ ] Email de confirmación con Resend
-- [ ] Success page (`/success`)
+- [x] Success page (`/success`) — nav + footer + gradient cálido
+- [ ] R2 signed URLs post-capture (Fase 2)
+- [ ] Email de confirmación con Resend (Fase 2)
 
 ## Componentes UI
 

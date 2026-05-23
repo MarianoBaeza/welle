@@ -9,9 +9,10 @@ interface Props {
   library: Library;
   onHoverEnter?: () => void;
   onHoverLeave?: () => void;
+  onBuy?: () => void;
 }
 
-export function LibraryCard({ library, onHoverEnter, onHoverLeave }: Props) {
+export function LibraryCard({ library, onHoverEnter, onHoverLeave, onBuy }: Props) {
   const router = useRouter();
 
   return (
@@ -47,7 +48,7 @@ export function LibraryCard({ library, onHoverEnter, onHoverLeave }: Props) {
           <WelleButton
             variant="outline-accent"
             accentColor={library.accentColor}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); onBuy?.(); }}
           >
             Buy Now — ${library.price}
           </WelleButton>

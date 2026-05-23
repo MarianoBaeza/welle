@@ -1,18 +1,56 @@
-import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
+import { libraries, bundle } from '@/data/products';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+async function getAccessToken(): Promise<string> {
+  const res = await fetch(`${process.env.PAYPAL_API_URL}/v1/oauth2/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${Buffer.from(
+        `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+      ).toString('base64')}`,
+    },
+    body: 'grant_type=client_credentials',
+  });
+  const data = await res.json();
+  return data.access_token;
+}
 
 export async function POST(req: NextRequest) {
-  const { priceId } = await req.json();
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+  const { productSlug, type } = await req.json();
 
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${baseUrl}/`,
+  let price: number;
+  let description: string;
+
+  if (type === 'bundle') {
+    price = bundle.price;
+    description = `Welle — ${bundle.name}`;
+  } else {
+    const library = libraries.find((l) => l.slug === productSlug);
+    if (!library) return NextResponse.json({ error: 'Product not found' }, { status: 404 });
+    price = library.price;
+    description = `Welle — ${library.name}`;
+  }
+
+  const accessToken = await getAccessToken();
+
+  const res = await fetch(`${process.env.PAYPAL_API_URL}/v2/checkout/orders`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: { currency_code: 'USD', value: price.toFixed(2) },
+          description,
+        },
+      ],
+    }),
   });
 
-  return NextResponse.json({ url: session.url });
+  const order = await res.json();
+  return NextResponse.json({ orderID: order.id });
 }

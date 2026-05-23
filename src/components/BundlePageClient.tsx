@@ -1,18 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Bundle, Library } from '@/types';
 import { NavHeader } from './NavHeader';
 import { Footer } from './Footer';
 import { LibraryPlayer } from './LibraryPlayer';
+import { LibraryCard } from './LibraryCard';
 import { WelleButton } from './ui/welle-button';
 import { BackgroundGradient } from './ui/background-gradient';
 import { PayPalModal } from './PayPalModal';
-import { BundleUpsell } from './BundleUpsell';
 
 interface Props {
-  library: Library;
+  libraries: Library[];
   bundle: Bundle;
 }
 
@@ -28,40 +28,65 @@ type ModalProduct = {
   image?: string;
 };
 
-export function LibraryPageClient({ library, bundle }: Props) {
+export function BundlePageClient({ libraries, bundle }: Props) {
   const [modal, setModal] = useState<ModalProduct | null>(null);
+  const [currentAccent, setCurrentAccent] = useState(libraries[0]?.accentColor ?? '#ffffff');
 
-  const openLibrary = () =>
-    setModal({
-      name: library.name,
-      slug: library.slug,
-      price: library.price,
-      type: 'library',
-      description: library.description,
-      soundCount: library.soundCount,
-      tags: library.tags,
-      accentColor: library.accentColor,
-      image: library.image,
-    });
+  const bundleTracks = useMemo(
+    () =>
+      libraries.flatMap((lib) =>
+        lib.previewTracks.map((t) => ({
+          ...t,
+          category: lib.name,
+          accentColor: lib.accentColor,
+        }))
+      ),
+    [libraries]
+  );
 
   const openBundle = () =>
-    setModal({ name: bundle.name, slug: 'bundle', price: bundle.price, type: 'bundle' });
+    setModal({
+      name: bundle.name,
+      slug: 'bundle',
+      price: bundle.price,
+      type: 'bundle',
+      description: bundle.description,
+      soundCount: bundle.soundCount,
+      tags: bundle.tags,
+      image: bundle.image,
+    });
+
+  const openLibrary = (lib: Library) =>
+    setModal({
+      name: lib.name,
+      slug: lib.slug,
+      price: lib.price,
+      type: 'library',
+      description: lib.description,
+      soundCount: lib.soundCount,
+      tags: lib.tags,
+      accentColor: lib.accentColor,
+      image: lib.image,
+    });
 
   return (
     <main className="min-h-screen text-white flex flex-col">
-      <BackgroundGradient
-        hoveredId={library.id}
-        accents={[{ id: library.id, color: library.accentColor }]}
-      />
+      <BackgroundGradient hoveredId="bundle" accents={[{ id: 'bundle', color: currentAccent }]} />
 
-      <NavHeader />
+      <NavHeader
+        cta={{
+          label: `Get Bundle — $${bundle.price}`,
+          onAction: openBundle,
+          accentColor: currentAccent,
+        }}
+      />
 
       <div className="flex-1 pt-24 pb-0 px-6 max-w-7xl mx-auto w-full">
 
         {/* ── Banner ────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden p-4 md:p-6 grid grid-cols-1 md:grid-cols-[2fr_3fr_2fr] gap-5 md:gap-7">
           <Image
-            src={library.image}
+            src={bundle.image}
             alt=""
             fill
             className="object-cover"
@@ -72,28 +97,29 @@ export function LibraryPageClient({ library, bundle }: Props) {
           {/* Left: image + tags + description */}
           <div className="relative z-10 flex flex-col gap-3">
             <div className="relative aspect-square rounded-xl overflow-hidden">
-              <Image src={library.image} alt={library.name} fill className="object-cover" />
+              <Image src={bundle.image} alt={bundle.name} fill className="object-cover" />
             </div>
             <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
-              {library.tags.map((tag) => (
+              {bundle.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="text-xs px-3 py-1 rounded-full border font-medium"
-                  style={{ borderColor: library.accentColor + '66', color: library.accentColor }}
+                  className="text-xs px-3 py-1 rounded-full border font-medium transition-colors duration-500"
+                  style={{ borderColor: currentAccent + '66', color: currentAccent }}
                 >
                   {tag}
                 </span>
               ))}
             </div>
-            <p className="text-zinc-400 text-sm leading-relaxed">{library.description}</p>
+            <p className="text-zinc-400 text-sm leading-relaxed">{bundle.description}</p>
           </div>
 
           {/* Center: player */}
           <div className="relative z-10 h-full flex-col items-center justify-center">
             <LibraryPlayer
-              tracks={library.previewTracks}
-              accentColor={library.accentColor}
-              soundCount={library.soundCount}
+              tracks={bundleTracks}
+              accentColor={currentAccent}
+              soundCount={bundle.soundCount}
+              onAccentChange={setCurrentAccent}
             />
           </div>
 
@@ -101,29 +127,40 @@ export function LibraryPageClient({ library, bundle }: Props) {
           <div className="relative z-10 flex flex-col items-center justify-center gap-5 text-center">
             <div>
               <p className="text-zinc-300 text-sm font-medium uppercase tracking-widest mb-1">
-                {library.soundCount} sounds
+                {bundle.soundCount} sounds
               </p>
-              <p
-                className="text-7xl font-black leading-none"
-                style={{ color: library.accentColor }}
-              >
-                ${library.price}
-              </p>
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-500 text-lg line-through">${bundle.price + 18}</span>
+                <p
+                  className="text-7xl font-black leading-none transition-colors duration-500"
+                  style={{ color: currentAccent }}
+                >
+                  ${bundle.price}
+                </p>
+              </div>
               <p className="text-zinc-300 text-sm mt-2 font-medium">One-time purchase</p>
               <p className="text-zinc-500 text-xs mt-0.5">Instant download · Yours forever</p>
             </div>
             <WelleButton
-              variant="solid"
-              accentColor={library.accentColor}
-              onClick={openLibrary}
+              variant="white"
+              onClick={openBundle}
               className="w-full text-base py-4"
             >
-              Buy Now — ${library.price}
+              Get Bundle — ${bundle.price}
             </WelleButton>
           </div>
         </section>
 
-        <BundleUpsell bundle={bundle} onBuy={openBundle} className="mt-6" />
+        {/* Library cards */}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {libraries.map((lib) => (
+            <LibraryCard
+              key={lib.id}
+              library={lib}
+              onBuy={() => openLibrary(lib)}
+            />
+          ))}
+        </div>
 
       </div>
 
@@ -132,17 +169,16 @@ export function LibraryPageClient({ library, bundle }: Props) {
         <div className="flex max-w-7xl mx-auto px-6 md:px-12 py-12 flex-col sm:flex-row gap-6 items-center justify-between">
           <div>
             <p className="text-white text-2xl font-bold">
-              Make your creativity heard.
+              All three moods. One download.
             </p>
             <p className="text-zinc-400 text-sm mt-1">One-time purchase · Instant download · Yours forever</p>
           </div>
           <WelleButton
-            variant="solid"
-            accentColor={library.accentColor}
-            onClick={openLibrary}
+            variant="white"
+            onClick={openBundle}
             className="flex-none px-10 py-4 text-base w-full sm:w-auto"
           >
-            Buy Now — ${library.price}
+            Get Bundle — ${bundle.price}
           </WelleButton>
         </div>
       </section>
