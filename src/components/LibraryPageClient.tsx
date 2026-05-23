@@ -45,7 +45,17 @@ export function LibraryPageClient({ library, bundle }: Props) {
     });
 
   const openBundle = () =>
-    setModal({ name: bundle.name, slug: 'bundle', price: bundle.price, type: 'bundle' });
+    setModal({
+      name: bundle.name,
+      slug: 'bundle',
+      price: bundle.price,
+      type: 'bundle',
+      description: bundle.description,
+      soundCount: bundle.soundCount,
+      tags: bundle.tags,
+      accentColor: bundle.accentColor,
+      image: bundle.image,
+    });
 
   return (
     <main className="min-h-screen text-white flex flex-col">

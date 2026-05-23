@@ -7,9 +7,9 @@ import { NavHeader } from './NavHeader';
 import { Footer } from './Footer';
 import { LibraryPlayer } from './LibraryPlayer';
 import { LibraryCard } from './LibraryCard';
-import { WelleButton } from './ui/welle-button';
 import { BackgroundGradient } from './ui/background-gradient';
 import { PayPalModal } from './PayPalModal';
+import { WelleButton } from './ui/welle-button';
 
 interface Props {
   libraries: Library[];
@@ -30,12 +30,12 @@ type ModalProduct = {
 
 export function BundlePageClient({ libraries, bundle }: Props) {
   const [modal, setModal] = useState<ModalProduct | null>(null);
-  const [currentAccent, setCurrentAccent] = useState(libraries[0]?.accentColor ?? '#ffffff');
+  const [currentAccent, setCurrentAccent] = useState(bundle.accentColor ?? '#ffffff');
 
   const bundleTracks = useMemo(
     () =>
       libraries.flatMap((lib) =>
-        lib.previewTracks.map((t) => ({
+        lib.previewTracks.slice(0, 2).map((t) => ({
           ...t,
           category: lib.name,
           accentColor: lib.accentColor,
@@ -73,13 +73,7 @@ export function BundlePageClient({ libraries, bundle }: Props) {
     <main className="min-h-screen text-white flex flex-col">
       <BackgroundGradient hoveredId="bundle" accents={[{ id: 'bundle', color: currentAccent }]} />
 
-      <NavHeader
-        cta={{
-          label: `Get Bundle — $${bundle.price}`,
-          onAction: openBundle,
-          accentColor: currentAccent,
-        }}
-      />
+      <NavHeader />
 
       <div className="flex-1 pt-24 pb-0 px-6 max-w-7xl mx-auto w-full">
 
@@ -142,7 +136,8 @@ export function BundlePageClient({ libraries, bundle }: Props) {
               <p className="text-zinc-500 text-xs mt-0.5">Instant download · Yours forever</p>
             </div>
             <WelleButton
-              variant="white"
+              variant="solid"
+              accentColor={currentAccent}
               onClick={openBundle}
               className="w-full text-base py-4"
             >
@@ -174,7 +169,8 @@ export function BundlePageClient({ libraries, bundle }: Props) {
             <p className="text-zinc-400 text-sm mt-1">One-time purchase · Instant download · Yours forever</p>
           </div>
           <WelleButton
-            variant="white"
+            variant="solid"
+            accentColor={currentAccent}
             onClick={openBundle}
             className="flex-none px-10 py-4 text-base w-full sm:w-auto"
           >

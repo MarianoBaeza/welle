@@ -132,7 +132,7 @@ Componentes clave:
 ### Componentes disponibles
 | Componente | Archivo | Variantes / Notas |
 |---|---|---|
-| `WelleButton` | `components/ui/welle-button.tsx` | `solid` (accentColor bg, text-black), `white` (bg-white, text-black), `outline-accent` (borde dinámico con `accentColor`). Para `outline-accent` fuera de un flex container, pasar `className="flex-none"` para evitar que `flex-1` lo expanda. |
+| `HoverButton` | `components/ui/hover-button.tsx` | Botón glass con partículas de luz que siguen el cursor. Prop `accentColor` controla el color del highlight. Sin variantes — todo se personaliza vía `className`. |
 | `BackgroundGradient` | `components/ui/background-gradient.tsx` | Gradiente radial con Framer Motion que sigue el cursor. Props: `hoveredId` (string \| null), `accents` (array `{id, color}`). Posición `fixed -z-10`. |
 | `NavHeader` | `components/NavHeader.tsx` | Prop opcional `cta: { label, onAction, loading?, accentColor? }`. Si se pasa, reemplaza el tagline con un botón `outline-accent`. Backdrop blur al hacer scroll. Logo linkea a `/`. |
 | `LibraryPlayer` | `components/LibraryPlayer.tsx` | Player de audio con tracks agrupados por categoría (2 columnas), barra de progreso clickeable, y `SpectrumVisualizer`. Props: `tracks`, `accentColor`, `soundCount`. |

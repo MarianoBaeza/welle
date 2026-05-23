@@ -38,7 +38,17 @@ export function HomeClient({ libraries, bundle }: Props) {
       <div className="md:max-w-7xl md:mx-auto md:pt-20 w-full">
         <BundleCard
           bundle={bundle}
-          onBuy={() => setModal({ name: bundle.name, slug: 'bundle', price: bundle.price, type: 'bundle' })}
+          onBuy={() => setModal({
+            name: bundle.name,
+            slug: 'bundle',
+            price: bundle.price,
+            type: 'bundle',
+            description: bundle.description,
+            soundCount: bundle.soundCount,
+            tags: bundle.tags,
+            accentColor: bundle.accentColor,
+            image: bundle.image,
+          })}
         />
       </div>
 
@@ -68,7 +78,17 @@ export function HomeClient({ libraries, bundle }: Props) {
         </div>
         <BundleUpsell
           bundle={bundle}
-          onBuy={() => setModal({ name: bundle.name, slug: 'bundle', price: bundle.price, type: 'bundle' })}
+          onBuy={() => setModal({
+            name: bundle.name,
+            slug: 'bundle',
+            price: bundle.price,
+            type: 'bundle',
+            description: bundle.description,
+            soundCount: bundle.soundCount,
+            tags: bundle.tags,
+            accentColor: bundle.accentColor,
+            image: bundle.image,
+          })}
         />
       </div>
 

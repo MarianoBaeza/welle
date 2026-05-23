@@ -27,16 +27,14 @@ export function NavHeader({ cta }: Props) {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 flex flex-row items-center justify-between px-6 md:px-12 py-4 transition-[background-color,backdrop-filter] duration-300 ${
-                !visible ? 'backdrop-blur-md bg-black/30' : ''
-            }`}
+            className="fixed top-0 left-0 right-0 z-50 flex flex-row items-center justify-between px-6 md:px-12 py-4"
         >
             <Link href="/">
                 <Image src="/logo-welle.png" alt="Welle" width={42} height={42} priority />
             </Link>
             {cta ? (
                 <WelleButton
-                    variant="outline-accent"
+                    variant="solid"
                     accentColor={cta.accentColor ?? '#ffffff'}
                     onClick={cta.onAction}
                     disabled={cta.loading}

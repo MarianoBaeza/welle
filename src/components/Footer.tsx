@@ -43,7 +43,7 @@ export function Footer() {
 
                 <div className="flex flex-col items-center gap-2 text-center">
                     <Image src="/logo-welle.png" alt="Welle" width={48} height={48} />
-                    <p className="text-zinc-400 text-sm font-light">welle — Make your creativity heard.</p>
+                    <p className="text-zinc-400 text-sm font-light">Welle — Make your creativity heard.</p>
                     <p className="text-zinc-600 text-xs mt-4">© {new Date().getFullYear()} Welle. All rights reserved.</p>
                 </div>
 

@@ -28,4 +28,5 @@ export interface Bundle {
   tags: string[];
   libraryIds: string[];
   image: string;
+  accentColor?: string;
 }

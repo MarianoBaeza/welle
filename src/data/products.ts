@@ -80,6 +80,7 @@ export const bundle: Bundle = {
   tags: ['ASMR', 'Cinematic', 'TikTok', 'Reels', 'Vlogs'],
   libraryIds: ['asmr', 'content-creator', 'cinematic'],
   image: '/bundle.jpg',
+  accentColor: '#ffffff',
 };
 
 export function getLibraryBySlug(slug: string): Library | undefined {
