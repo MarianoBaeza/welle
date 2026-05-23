@@ -12,6 +12,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Welle — Sound Libraries for Creators',
   description: 'Premium sound libraries designed for content creators. ASMR, editing effects, and streaming sounds.',
+  icons: {
+    icon: '/logo-welle.png',
+  },
 };
 
 export default function RootLayout({
