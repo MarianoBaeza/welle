@@ -12,6 +12,27 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: 'Welle — Sound Libraries for Creators',
   description: 'Premium sound libraries designed for content creators. ASMR, editing effects, and streaming sounds.',
+  openGraph: {
+    title: 'Welle — Sound Libraries for Creators',
+    description: 'Premium sound libraries designed for content creators. ASMR, editing effects, and streaming sounds.',
+    url: 'https://welle-pink.vercel.app',
+    siteName: 'Welle',
+    images: [
+      {
+        url: 'https://welle-pink.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Welle — Sound Libraries for Creators',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Welle — Sound Libraries for Creators',
+    description: 'Premium sound libraries designed for content creators. ASMR, editing effects, and streaming sounds.',
+    images: ['https://welle-pink.vercel.app/og-image.png'],
+  },
 };
 
 export default function RootLayout({
