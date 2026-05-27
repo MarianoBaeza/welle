@@ -15,8 +15,8 @@ export function Footer() {
 
                 <div className="flex flex-col gap-2">
                     <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Follow us</p>
-                    <a href="https://tiktok.com/@welle" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors text-sm">TikTok</a>
-                    <a href="https://instagram.com/welle" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors text-sm">Instagram</a>
+                    <span className="text-zinc-600 text-sm cursor-default">TikTok</span>
+                    <span className="text-zinc-600 text-sm cursor-default">Instagram</span>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -41,8 +41,8 @@ export function Footer() {
                 <div className="flex flex-col gap-4">
                     <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Follow us</p>
                     <div className="flex flex-col gap-2">
-                        <a href="https://tiktok.com/@welle" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors text-sm">TikTok</a>
-                        <a href="https://instagram.com/welle" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-white transition-colors text-sm">Instagram</a>
+                        <span className="text-zinc-600 text-sm cursor-default">TikTok</span>
+                        <span className="text-zinc-600 text-sm cursor-default">Instagram</span>
                     </div>
                 </div>
 
