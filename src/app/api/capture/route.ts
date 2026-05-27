@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createHmac } from 'crypto';
 import { libraries, bundle } from '@/data/products';
 import { getDownloadUrls } from '@/lib/r2';
 
@@ -51,5 +52,8 @@ export async function POST(req: NextRequest) {
 
   const downloadUrls = await getDownloadUrls(productSlug, type);
 
-  return NextResponse.json({ success: true, downloadUrls, buyerName, productName });
+  const payload = `${orderID}|${productSlug}|${type}|${Date.now()}`;
+  const sendToken = `${payload}|${createHmac('sha256', process.env.SEND_TOKEN_SECRET!).update(payload).digest('hex')}`;
+
+  return NextResponse.json({ success: true, downloadUrls, buyerName, productName, sendToken });
 }

@@ -6,6 +6,7 @@ interface PurchaseData {
   downloadUrls: { name: string; url: string }[];
   buyerName: string;
   productName: string;
+  sendToken: string;
 }
 
 const RESEND_COOLDOWN = 60;
@@ -54,8 +55,8 @@ export function EmailForm() {
         body: JSON.stringify({
           email,
           buyerName: purchase.buyerName,
-          downloadUrls: purchase.downloadUrls,
           productName: purchase.productName,
+          sendToken: purchase.sendToken,
         }),
       });
       const data = await res.json();

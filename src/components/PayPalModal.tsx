@@ -58,6 +58,7 @@ export function PayPalModal({
           downloadUrls: data.downloadUrls,
           buyerName: data.buyerName,
           productName: data.productName,
+          sendToken: data.sendToken,
         })
       );
       router.push(`/success?product=${productSlug}&type=${type}`);
