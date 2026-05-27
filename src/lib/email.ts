@@ -41,5 +41,4 @@ export async function sendDownloadEmail(
   });
 
   if (error) throw new Error(JSON.stringify(error));
-  return data;
 }
