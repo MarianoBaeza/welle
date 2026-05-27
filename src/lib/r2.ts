@@ -39,7 +39,6 @@ export async function getDownloadUrls(
         }),
         { expiresIn: FORTY_EIGHT_HOURS }
       );
-      console.log(`[r2] signed URL for ${slug}.zip:`, url.split('?')[0]);
       return {
         name: lib ? `${lib.name} Library` : slug,
         url,

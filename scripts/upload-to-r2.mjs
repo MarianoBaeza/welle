@@ -1,8 +1,8 @@
 /**
- * Sube los ZIPs de las librerías a Cloudflare R2.
- * Uso: node scripts/upload-to-r2.mjs
+ * Uploads library ZIPs to Cloudflare R2.
+ * Usage: node scripts/upload-to-r2.mjs
  *
- * Requiere las variables de entorno en .env.local:
+ * Requires the following env vars in .env.local:
  *   R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME
  */
 
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Cargar .env.local manualmente
+// Load .env.local manually
 const envPath = join(__dirname, '..', '.env.local');
 const envContent = readFileSync(envPath, 'utf-8');
 for (const line of envContent.split('\n')) {
@@ -46,17 +46,17 @@ for (const { local, key } of files) {
   try {
     size = statSync(filePath).size;
   } catch {
-    console.log(`[skip] ${local} — no encontrado en ${filePath}`);
+    console.log(`[skip] ${local} — not found at ${filePath}`);
     continue;
   }
 
-  // Verificar si ya existe en R2
+  // Skip if already uploaded
   try {
     await client.send(new HeadObjectCommand({ Bucket: BUCKET, Key: key }));
-    console.log(`[skip] ${key} — ya existe en R2`);
+    console.log(`[skip] ${key} — already exists in R2`);
     continue;
   } catch {
-    // No existe, hay que subirlo
+    // Does not exist yet — proceed with upload
   }
 
   const sizeMB = (size / 1024 / 1024).toFixed(1);
@@ -73,8 +73,8 @@ for (const { local, key } of files) {
     })
   );
 
-  console.log(`[ok] ${key} subido`);
+  console.log(`[ok] ${key} uploaded`);
 }
 
-console.log('\nListo. Archivos en R2:');
+console.log('\nDone. Files in R2:');
 files.forEach(({ key }) => console.log(`  ${key}`));

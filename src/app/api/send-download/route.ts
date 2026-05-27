@@ -45,8 +45,7 @@ export async function POST(req: NextRequest) {
   const downloadUrls = await getDownloadUrls(verified.productSlug, verified.type);
 
   try {
-    const result = await sendDownloadEmail(email, buyerName ?? 'there', downloadUrls, productName);
-    console.log('[send-download] Resend OK:', result);
+    await sendDownloadEmail(email, buyerName ?? 'there', downloadUrls, productName);
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('[send-download] Resend error:', err);
