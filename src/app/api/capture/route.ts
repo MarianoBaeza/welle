@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { libraries, bundle } from '@/data/products';
+import { getDownloadUrls } from '@/lib/r2';
 
 async function getAccessToken(): Promise<string> {
   const res = await fetch(`${process.env.PAYPAL_API_URL}/v1/oauth2/token`, {
@@ -16,7 +18,7 @@ async function getAccessToken(): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
-  const { orderID } = await req.json();
+  const { orderID, productSlug, type } = await req.json();
 
   const accessToken = await getAccessToken();
 
@@ -37,5 +39,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Payment not completed' }, { status: 400 });
   }
 
-  return NextResponse.json({ success: true });
+  const buyerName: string = data.payer?.name?.given_name ?? 'there';
+
+  let productName = 'your library';
+  if (type === 'bundle') {
+    productName = bundle.name;
+  } else {
+    const library = libraries.find((l) => l.slug === productSlug);
+    if (library) productName = library.name;
+  }
+
+  const downloadUrls = await getDownloadUrls(productSlug, type);
+
+  return NextResponse.json({ success: true, downloadUrls, buyerName, productName });
 }

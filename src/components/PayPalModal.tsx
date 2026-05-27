@@ -48,10 +48,18 @@ export function PayPalModal({
     const res = await fetch('/api/capture', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ orderID }),
+      body: JSON.stringify({ orderID, productSlug, type }),
     });
     const data = await res.json();
     if (data.success) {
+      sessionStorage.setItem(
+        'welle_purchase',
+        JSON.stringify({
+          downloadUrls: data.downloadUrls,
+          buyerName: data.buyerName,
+          productName: data.productName,
+        })
+      );
       router.push(`/success?product=${productSlug}&type=${type}`);
     }
   };

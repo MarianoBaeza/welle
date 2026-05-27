@@ -35,7 +35,7 @@ Modelo de venta: compra por librería, bundle con las tres, descuento de lanzami
 |---|---|
 | Framework | Next.js full-stack (API routes para webhooks) |
 | CSS/UI | Tailwind + shadcn/ui + Framer Motion (selectivo) |
-| Pagos | Stripe Checkout + webhooks |
+| Pagos | PayPal Orders API v2 (sandbox por ahora) |
 | Storage/entrega | Cloudflare R2 + signed URLs (expiración 48hs) |
 | Email transaccional | Resend |
 | Catálogo de productos | `products.ts` en el repo (sin DB por ahora) |
@@ -97,12 +97,17 @@ Flujo:
 1. BUY NOW abre `PayPalModal`
 2. `PayPalButtons.createOrder` → `POST /api/checkout { productSlug, type }` → `{ orderID }`
 3. Usuario aprueba en popup de PayPal
-4. `PayPalButtons.onApprove` → `POST /api/capture { orderID }` → verifica `status === COMPLETED`
-5. Redirect a `/success?product={slug}&type={type}`
+4. `PayPalButtons.onApprove` → `POST /api/capture { orderID, productSlug, type }` → verifica `status === COMPLETED`
+5. Capture devuelve `{ success, downloadUrls, buyerName, productName }` → se guarda en `sessionStorage` como `welle_purchase`
+6. Redirect a `/success?product={slug}&type={type}`
+7. Usuario ingresa su email en `EmailForm` → `POST /api/send-download` → Resend
+
+**IMPORTANTE — productSlug y type vienen del cliente:** PayPal sandbox no devuelve `custom_id` en la respuesta de capture. `productSlug` y `type` se pasan directamente en el body del POST a `/api/capture` desde `PayPalModal.onApprove`. No intentar extraerlos de `data.purchase_units[0].custom_id`.
 
 Componentes clave:
 - `PayPalProvider` — wrapper client (`'use client'`) con `PayPalScriptProvider`, montado en `layout.tsx`
 - `PayPalModal` — modal con `PayPalButtons`, acepta `{ isOpen, onClose, productName, productSlug, price, type }`
+- `EmailForm` — client component en `/success`: lee `welle_purchase` de sessionStorage, pide email al usuario, POST a `/api/send-download`. Incluye reenvío (una vez, cooldown de 60s) y fallback a `wellesupport@gmail.com`
 - Modal se gestiona con estado local en `HomeClient` y `LibraryPageClient`
 
 ## Estado del proyecto
@@ -118,8 +123,13 @@ Componentes clave:
 - [x] `PayPalModal` + `PayPalProvider`
 - [x] Audio previews MP3 en `public/previews/{slug}/` (22 archivos, 30s trim)
 - [x] Success page (`/success`) — nav + footer + gradient cálido
-- [ ] R2 signed URLs post-capture (Fase 2)
-- [ ] Email de confirmación con Resend (Fase 2)
+- [x] ZIPs de librerías generados y subidos a R2
+- [x] R2 signed URLs post-capture (`forcePathStyle: true`)
+- [x] Email de confirmación con Resend — usuario elige su email en `/success` (`EmailForm`)
+- [x] `/api/send-download` — endpoint de envío de email desacoplado del capture
+- [x] Reenvío de email con cooldown 60s + fallback a soporte (`wellesupport@gmail.com`)
+- [x] Flujo completo probado end-to-end en sandbox (mayo 2026)
+- [x] Deploy en Vercel (sandbox) — URL: welle.vercel.app
 
 ## Componentes UI
 
@@ -202,7 +212,49 @@ El `NavHeader` en library pages reemplaza el tagline con un botón `outline-acce
 - El `AudioContext` se inicializa lazy en el primer click (compatibilidad Safari/autoplay policy)
 - `MediaElementSourceNode` se crea una sola vez por instancia del player — no recrear
 
-### API de checkout
-- `POST /api/checkout` — body: `{ priceId: string }` — responde: `{ url: string }`
-- Redirige a Stripe Checkout. `success_url` → `/success?session_id=...`, `cancel_url` → `/`
-- Requiere `STRIPE_SECRET_KEY` y `NEXT_PUBLIC_APP_URL` en env
+### Entrega de archivos (Fase 2)
+
+### Formato
+- Un ZIP por librería: `asmr.zip`, `content-creator.zip`, `cinematic.zip`
+- Bundle = los 3 ZIPs separados (no un ZIP único de 2.5 GB)
+- Archivos fuente en `welle-material/libraries/{ASMR,CC,Cinematic}/` (WAVs, ~2.5 GB total)
+- ZIPs se suben a Cloudflare R2 bucket `welle-downloads`
+
+### Flujo post-capture
+1. `/api/capture` recibe `{ orderID, productSlug, type }` del cliente
+2. Verifica `status === COMPLETED` contra PayPal API
+3. Genera signed URL(s) de R2 con expiración 48hs
+4. Retorna `{ success, downloadUrls, buyerName, productName }` — **NO envía email**
+5. Frontend guarda en `sessionStorage('welle_purchase')` y redirige a `/success`
+6. `/success` muestra `EmailForm`: usuario ingresa email → `POST /api/send-download` → Resend
+
+### Variables de entorno R2
+```
+R2_ACCOUNT_ID
+R2_ACCESS_KEY_ID
+R2_SECRET_ACCESS_KEY
+R2_BUCKET_NAME=welle-downloads
+```
+**`R2_PUBLIC_URL` eliminado** — no se usa, los signed URLs se generan vía SDK.
+**`forcePathStyle: true`** requerido en el S3Client para R2.
+
+### Variables de entorno Resend
+```
+RESEND_API_KEY
+RESEND_FROM_EMAIL=onboarding@resend.dev  ← sandbox; para producción necesita dominio verificado
+```
+**Limitación sandbox:** `onboarding@resend.dev` solo entrega a `kusikitishabox@gmail.com` (email de la cuenta Resend). Para enviar a cualquier destinatario en producción, verificar dominio en resend.com/domains y actualizar `RESEND_FROM_EMAIL`.
+
+### Soporte
+Email de soporte: `wellesupport@gmail.com` — aparece en `EmailForm` (fallback tras reenvío) y en el footer.
+
+## Deployment
+
+| Decisión | Valor |
+|---|---|
+| Plataforma | Vercel |
+| Repo | https://github.com/MarianoBaeza/welle |
+| Dominio | `welle.vercel.app` (subdominio Vercel por ahora) |
+| PayPal | Sandbox — cambiar a producción con un solo env var swap |
+| R2 | Cuenta Cloudflare nueva |
+| Resend | Cuenta nueva, sender `onboarding@resend.dev` en sandbox |

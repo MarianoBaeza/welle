@@ -20,6 +20,11 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Support</p>
+                    <a href="mailto:wellesupport@gmail.com" className="text-zinc-400 hover:text-white transition-colors text-sm">wellesupport@gmail.com</a>
+                </div>
+
+                <div className="flex flex-col gap-2">
                     <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Libraries</p>
                     {libraries.map((lib) => (
                         <Link key={lib.id} href={`/library/${lib.slug}`} className="text-zinc-400 hover:text-white transition-colors text-sm">
@@ -48,13 +53,17 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col items-end gap-4">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Libraries</p>
                     <div className="flex flex-col items-end gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Libraries</p>
                         {libraries.map((lib) => (
                             <Link key={lib.id} href={`/library/${lib.slug}`} className="text-zinc-400 hover:text-white transition-colors text-sm">
                                 {lib.name}
                             </Link>
                         ))}
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">Support</p>
+                        <a href="mailto:wellesupport@gmail.com" className="text-zinc-400 hover:text-white transition-colors text-sm">wellesupport@gmail.com</a>
                     </div>
                 </div>
             </div>

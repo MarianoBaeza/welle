@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
         {
           amount: { currency_code: 'USD', value: price.toFixed(2) },
           description,
+          custom_id: `${productSlug}:${type}`,
         },
       ],
     }),

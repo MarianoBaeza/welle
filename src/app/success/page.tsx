@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { CheckCircle } from 'lucide-react';
 import { NavHeader } from '@/components/NavHeader';
 import { Footer } from '@/components/Footer';
+import { EmailForm } from '@/components/EmailForm';
 import { libraries, bundle } from '@/data/products';
 
 interface Props {
@@ -50,9 +51,7 @@ export default async function SuccessPage({ searchParams }: Props) {
             </p>
           </div>
 
-          <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
-            Your download link will arrive by email within the next few minutes. Check your spam folder if it doesn&apos;t show up.
-          </p>
+          <EmailForm />
 
           <Link
             href="/"
