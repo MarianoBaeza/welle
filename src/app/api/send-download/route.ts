@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from 'crypto';
 import { sendDownloadEmail } from '@/lib/email';
 import { getDownloadUrls } from '@/lib/r2';
 
-function verifyToken(sendToken: string): { productSlug: string; type: string } | null {
+function verifyToken(sendToken: string): { productSlug: string; type: 'library' | 'bundle' } | null {
   const parts = sendToken.split('|');
   if (parts.length !== 5) return null;
 
@@ -21,6 +21,7 @@ function verifyToken(sendToken: string): { productSlug: string; type: string } |
   }
 
   if (Date.now() - parseInt(timestamp) > 2 * 60 * 60 * 1000) return null;
+  if (type !== 'library' && type !== 'bundle') return null;
 
   return { productSlug, type };
 }
