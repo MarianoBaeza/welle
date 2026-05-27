@@ -17,10 +17,10 @@ Welle is a digital storefront for premium sound libraries built for short-form c
 
 | Library | Price | Sounds |
 |---|---|---|
-| ASMR | $19 | 60 |
-| Content Creator | $19 | 80 |
-| Cinematic | $19 | 70 |
-| Complete Bundle | $39 | 210 |
+| ASMR | $19 | 162 |
+| Content Creator | $19 | 123 |
+| Cinematic | $19 | 190 |
+| Complete Bundle | $39 | 475 |
 
 ## Stack
 
