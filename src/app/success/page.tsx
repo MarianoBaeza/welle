@@ -43,7 +43,7 @@ export default async function SuccessPage({ searchParams }: Props) {
           />
 
           <div className="flex flex-col gap-2">
-            <h1 className="text-4xl font-black text-white leading-tight">
+            <h1 className="text-4xl font-semibold text-white leading-tight">
               You&apos;re all set.
             </h1>
             <p className="text-zinc-400 text-lg font-light">

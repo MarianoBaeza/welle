@@ -21,7 +21,7 @@ export function BundleUpsell({ bundle, onBuy, className }: Props) {
       <div className="text-center md:text-left w-full md:w-auto">
         <div className="flex flex-col sm:flex-row sm:items-center items-center md:items-start gap-2 mb-2">
           <p className="text-2xl font-bold">Get all 3 libraries</p>
-          <span className="text-xs font-black uppercase tracking-widest bg-white text-black px-2.5 py-1 rounded-full">
+          <span className="text-xs font-semibold uppercase tracking-widest bg-white text-black px-2.5 py-1 rounded-full">
             Best Value
           </span>
         </div>
@@ -30,7 +30,7 @@ export function BundleUpsell({ bundle, onBuy, className }: Props) {
       <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
         <div className="text-center md:text-right">
           <p className="text-sm text-zinc-500 line-through">${originalPrice}</p>
-          <p className="text-4xl font-black text-white">${bundle.price}</p>
+          <p className="text-4xl font-semibold text-white">${bundle.price}</p>
           <p className="text-sm text-green-400 font-semibold mt-0.5">
             Save ${savings} ({pct}% off)
           </p>

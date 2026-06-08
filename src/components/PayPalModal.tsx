@@ -123,9 +123,9 @@ export function PayPalModal({
           )}
 
           <div className="flex items-start gap-1 leading-none">
-            <span className="text-3xl font-black text-zinc-400 mt-4">$</span>
+            <span className="text-3xl font-semibold text-zinc-400 mt-4">$</span>
             <span
-              className="text-[8rem] font-black leading-none"
+              className="text-[8rem] font-semibold leading-none"
               style={{ color: 'white' }}
             >
               {price}
@@ -204,7 +204,7 @@ export function PayPalModal({
           )}
         </div>
         <div className="flex items-baseline gap-1">
-          <span className="text-4xl font-black text-white">${price}</span>
+          <span className="text-4xl font-semibold text-white">${price}</span>
           <span className="text-zinc-500 text-sm">USD</span>
         </div>
 

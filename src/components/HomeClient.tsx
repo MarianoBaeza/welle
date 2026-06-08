@@ -35,7 +35,7 @@ export function HomeClient({ libraries, bundle }: Props) {
     <>
       <BackgroundGradient hoveredId={hoveredId} accents={accents} />
 
-      <div className="md:max-w-7xl md:mx-auto md:pt-20 w-full">
+      <div className="md:max-w-7xl md:mx-auto md:pt-20 w-full md:px-6">
         <BundleCard
           bundle={bundle}
           onBuy={() => setModal({

@@ -33,7 +33,7 @@ export function LibraryCard({ library, onHoverEnter, onHoverLeave, onBuy }: Prop
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
 
       <div className="absolute inset-0 flex flex-col justify-end gap-3 p-5">
-        <h2 className="text-4xl font-black text-white leading-none tracking-tight">
+        <h2 className="text-4xl font-semibold text-white leading-none tracking-tight">
           {library.name}
         </h2>
         <div className="flex items-center justify-between">

@@ -114,7 +114,7 @@ export function LibraryPageClient({ library, bundle }: Props) {
                 {library.soundCount} sounds
               </p>
               <p
-                className="text-7xl font-black leading-none"
+                className="text-7xl font-semibold leading-none"
                 style={{ color: library.accentColor }}
               >
                 ${library.price}

@@ -27,12 +27,12 @@ export function BundleCard({ bundle, onBuy }: Props) {
       {/* Mobile layout */}
       <div className="absolute inset-0 flex flex-col justify-center p-8 md:hidden">
         <div className="flex flex-col items-center text-center gap-5">
-          <h2 className="text-4xl font-black text-white leading-none tracking-tight">
+          <h2 className="text-4xl font-semibold text-white leading-none tracking-tight">
             {bundle.name}
           </h2>
           <div className="flex flex-col items-center gap-1">
             <span className="text-zinc-500 text-base line-through">${bundle.price + 18}</span>
-            <span className="text-white text-7xl font-black leading-none">${bundle.price}</span>
+            <span className="text-white text-7xl font-semibold leading-none">${bundle.price}</span>
           </div>
           <WelleButton accentColor="white" onClick={(e) => { e.stopPropagation(); onBuy(); }}>
             Get Bundle — ${bundle.price}
@@ -45,7 +45,7 @@ export function BundleCard({ bundle, onBuy }: Props) {
         <div className="flex items-end justify-between gap-6">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2 transition-transform duration-500 ease-out group-hover:-translate-y-4">
-              <h2 className="text-5xl font-black text-white leading-none tracking-tight">
+              <h2 className="text-5xl font-semibold text-white leading-none tracking-tight">
                 {bundle.name}
               </h2>
               <p className="text-zinc-300 text-base mt-1">
@@ -60,12 +60,12 @@ export function BundleCard({ bundle, onBuy }: Props) {
           </div>
 
           <div className="flex flex-col items-end gap-3 shrink-0">
-            <span className="bg-white text-black text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full">
+            <span className="bg-white text-black text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
               Save $18
             </span>
             <div className="flex items-baseline gap-2">
               <span className="text-zinc-500 text-xl line-through">${bundle.price + 18}</span>
-              <span className="text-white text-6xl font-black leading-none">${bundle.price}</span>
+              <span className="text-white text-6xl font-semibold leading-none">${bundle.price}</span>
             </div>
             <WelleButton accentColor="white" onClick={(e) => { e.stopPropagation(); onBuy(); }}>
               Get Bundle — ${bundle.price}

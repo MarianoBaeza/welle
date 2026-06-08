@@ -27,11 +27,11 @@ export function WelleButton({
             className={cn(
                 'text-sm uppercase tracking-widest transition-transform duration-200 cursor-pointer',
                 variant === 'solid' &&
-                'font-black px-10 py-3.5 rounded-xl text-black hover:scale-105 active:scale-95',
+                'font-semibold px-10 py-3.5 rounded-xl text-black hover:scale-105 active:scale-95',
                 variant === 'white' &&
-                'font-black px-10 py-3.5 rounded-xl bg-white text-black hover:scale-105 active:scale-95',
+                'font-semibold px-10 py-3.5 rounded-xl bg-white text-black hover:scale-105 active:scale-95',
                 variant === 'outline-accent' &&
-                'flex-1 text-center py-2.5 rounded-lg border text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black hover:scale-105 active:scale-95',
+                'text-center px-6 py-2.5 rounded-lg border text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black hover:scale-105 active:scale-95',
                 className
             )}
             style={accentStyle}

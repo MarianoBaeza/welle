@@ -126,7 +126,7 @@ export function BundlePageClient({ libraries, bundle }: Props) {
               <div className="flex flex-col items-center">
                 <span className="text-zinc-500 text-lg line-through">${bundle.price + 18}</span>
                 <p
-                  className="text-7xl font-black leading-none transition-colors duration-500"
+                  className="text-7xl font-semibold leading-none transition-colors duration-500"
                   style={{ color: currentAccent }}
                 >
                   ${bundle.price}
