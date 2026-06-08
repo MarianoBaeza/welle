@@ -66,7 +66,7 @@ export function LibraryPageClient({ library, bundle }: Props) {
 
       <NavHeader />
 
-      <div className="flex-1 pt-24 pb-0 px-6 max-w-7xl mx-auto w-full">
+      <div className="flex-1 pt-24 pb-0 px-6 max-w-7xl mx-auto w-full md:pt-20">
 
         {/* ── Banner ────────────────────────────────────────────────── */}
         <section className="relative overflow-hidden p-4 md:p-6 grid grid-cols-1 md:grid-cols-[2fr_3fr_2fr] gap-5 md:gap-7">
