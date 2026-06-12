@@ -6,7 +6,7 @@
 <p align="center">TikTok · Reels · YouTube Shorts · Streamers</p>
 
 <p align="center">
-  <a href="https://welle.vercel.app">welle.vercel.app</a>
+  <a href="https://welle.vercel.app">wellesound.com</a>
 </p>
 
 ---
